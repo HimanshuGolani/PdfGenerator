@@ -1,11 +1,11 @@
 package com.pdfgen.pdfgen.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "pdf_documents")
@@ -14,9 +14,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PdfDocument {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
     private String documentHash;
@@ -30,7 +31,24 @@ public class PdfDocument {
     @Column(nullable = false)
     private String fileName;
 
-    // Additional metadata can be added here
+    @Column(nullable = false)
     private String seller;
+
+    @Column(nullable = false)
+    private String sellerGstin;
+
+    @Column(nullable = false)
+    private String sellerAddress;
+
+    @Column(nullable = false)
     private String buyer;
+
+    @Column(nullable = false)
+    private String buyerGstin;
+
+    @Column(nullable = false)
+    private String buyerAddress;
+
+    @OneToMany(mappedBy = "pdfDocument", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PdfItem> items;
 }
